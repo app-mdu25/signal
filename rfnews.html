@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+  <body>
+    <form id="myForm">
+      <label for="department">แผนก:</label><br>
+      <input type="text" id="department" name="department"><br>
+      <label for="topic">หัวข้อ:</label><br>
+      <input type="text" id="topic" name="topic"><br>
+      <label for="fileUrl">ลิงก์ไฟล์:</label><br>
+      <input type="text" id="fileUrl" name="fileUrl"><br>
+      <input type="submit" value="Submit">
+    </form>
+
+    <script>
+      document.getElementById('myForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        var data = {
+          department: document.getElementById('department').value,
+          topic: document.getElementById('topic').value,
+          fileUrl: document.getElementById('fileUrl').value
+        };
+
+        fetch('https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec', {
+          method: 'POST',
+          body: JSON.stringify(data),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }).then(response => response.json())
+          .then(response => {
+            if (response.result === 'success') {
+              Swal.fire({
+                icon: 'success',
+                title: 'สำเร็จ',
+                text: 'ส่งข้อมูลเรียบร้อยแล้ว'
+              });
+            } else {
+              Swal.fire({
+                icon: 'error',
+                title: 'เกิดข้อผิดพลาด',
+                text: 'มีปัญหาในการส่งข้อมูล'
+              });
+            }
+          }).catch(error => {
+            Swal.fire({
+              icon: 'error',
+              title: 'เกิดข้อผิดพลาด',
+              text: 'มีปัญหาในการส่งข้อมูล'
+            });
+          });
+      });
+    </script>
+  </body>
+</html>
